@@ -1,0 +1,22 @@
+<form [formGroup]="form" novalidate *ngIf="form">
+	<h3>Group form</h3>
+  <button (click)="addOps()">add</button>
+  <br>
+  <input formControlName="name">
+  <div formArrayName="operations"
+      *ngFor="let operation of form.controls.operations['controls']; let i=index">
+      <div [formGroupName]="i">
+        <input formControlName="hour" type="number">
+        <input formControlName="description">
+        <span *ngIf="(form?.customValidateErrors | async)?.operations">
+          {{(form?.customValidateErrors | async).operations[i]?.description?.join(', ')}}
+        </span>
+      </div>
+  </div>
+</form>
+
+<div>
+		<p>Form status: {{ form.status | json }}</p>
+    <p>Custom validation errors: {{form.customValidateErrors|async|json}}</p>
+    <p>Native errors: {{form?.nativeValidateErrors| async | json}}</p>
+</div>
