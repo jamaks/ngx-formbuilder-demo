@@ -1,17 +1,26 @@
 <form [formGroup]="form" novalidate *ngIf="form">
 	<h3>Group form</h3>
-  <button (click)="addOps()">add</button>
+	<button (click)="addOps()">add</button>
   <br>
-  <input formControlName="name">
+  <input formControlName="name" placeholder="name">
   <div formArrayName="operations"
-      *ngFor="let operation of form.controls.operations['controls']; let i=index">
+      *ngFor="let operation of getOps().controls; let i=index">
       <div [formGroupName]="i">
-        <input formControlName="hour" type="number">
-        <input formControlName="description">
+        <label for="">hour</label>
+        <input formControlName="hour" placeholder="hour" type="number">
+         <span *ngIf="(form?.customValidateErrors | async)?.operations">
+          {{(form?.customValidateErrors | async).operations[i]?.hour?.join(', ')}}
+        </span>
+        <br>
+        <label for="">description</label>
+        <input formControlName="description" placeholder="description">
+
         <span *ngIf="(form?.customValidateErrors | async)?.operations">
           {{(form?.customValidateErrors | async).operations[i]?.description?.join(', ')}}
         </span>
       </div>
+      <button (click)="getOps().removeAt(i)">x</button>
+       <br><br>
   </div>
 </form>
 
@@ -20,3 +29,6 @@
     <p>Custom validation errors: {{form.customValidateErrors|async|json}}</p>
     <p>Native errors: {{form?.nativeValidateErrors| async | json}}</p>
 </div>
+
+<br>
+<button (click)="onSaveClick()" [disabled]="!form.valid">Save</button>
