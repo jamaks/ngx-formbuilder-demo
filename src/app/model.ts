@@ -9,29 +9,62 @@ export function serializeModel<T>(object: T) {
 }
 
 import { ObjectMustBeNotEmpty, PropertySum } from './validators/validators';
+import { DictionaryExist, ValidateFromStoreConstraint } from './validators/async-validators';
+import { operationMaterialCountValidate } from './validators/validators-model';
 
+export class Material {
+  id: string = undefined;
 
-export class Operation {
-  id: number = undefined;
+  @IsNotEmpty()
+  name: string = undefined;
 
-  @IsNotEmpty({ always: true })
-  hour = 0;
+  @IsNotEmpty()
+  type: number = undefined;
 
-  @IsNotEmpty({ always: true })
-  description: string = undefined;
+  @IsNotEmpty()
+  count: number = undefined;
 
   constructor(data?: any) {
     plainToClassFromExist(this, data);
   }
 }
 
-export class Operations {
-  @IsNotEmpty({ always: true })
+export class Operation {
+  id: number = undefined;
+
+  @IsNotEmpty()
+  hour = 0;
+
+  @IsNotEmpty()
+  @DictionaryExist()
+  reference: string = undefined;
+
+  @IsNotEmpty()
+  description: string = undefined;
+
+  @IsNotEmpty()
+  @Validate(ValidateFromStoreConstraint, [operationMaterialCountValidate],{
+    message: 'не хватает минералов'
+  })
+  materialCount: number = undefined;
+
+  constructor(data?: any) {
+    plainToClassFromExist(this, data);
+  }
+}
+
+export class Sections {
+  @IsNotEmpty()
   name: string = undefined;
 
   @ValidateNested()
+  @IsOptional()
+  @Type(serializeModel(Material))
+  materials?: Material[] = [];
+
+  @ValidateNested()
   @Validate(PropertySum, ['hour', (sum) => sum === 24], { message: 'hour !== 24' })
-  @Validate(ObjectMustBeNotEmpty, [1,5], {message: 'operations should be > 0 & < 6'})
+  @Validate(ObjectMustBeNotEmpty, [1, 5], {message: 'operations should be > 0 & < 6'})
   @IsOptional()
   @Type(serializeModel(Operation))
   operations?: Operation[] = [];

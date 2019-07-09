@@ -1,20 +1,77 @@
 <form [formGroup]="form" novalidate *ngIf="form">
-	<h3>Group form</h3>
-	<button (click)="addOps()">add</button>
-  <br>
-  <input formControlName="name" placeholder="name">
+  <h3>Group form</h3>
+  <input formControlName="name" placeholder="group name">
+  <span *ngIf="(form?.customValidateErrors | async)?.name">
+      {{(form?.customValidateErrors | async)?.name.join(', ')}}
+  </span>
+  <br><br>
+
+
+
+  <h3>materials</h3>
+  <button (click)="addMaterial()">add material</button>
+  <br><br>
+  <div formArrayName="materials"
+  *ngFor="let material of getMaterials().controls.slice(0,5); let i=index">
+  <div [formGroupName]="i">
+    <!--name-->
+    <label for="">name</label>
+    <input formControlName="name" placeholder="name">
+     <span *ngIf="(form?.customValidateErrors | async)?.materials">
+      {{(form?.customValidateErrors | async).materials[i]?.name?.join(', ')}}
+    </span>
+    <br>
+    <!--type-->
+    <label for="">type</label>
+    <input formControlName="type" placeholder="type" type="number">
+     <span *ngIf="(form?.customValidateErrors | async)?.materials">
+      {{(form?.customValidateErrors | async).materials[i]?.type?.join(', ')}}
+    </span>
+    <br>
+    <!--count-->
+    <label for="">count</label>
+    <input formControlName="count" placeholder="count" type="number">
+     <span *ngIf="(form?.customValidateErrors | async)?.materials">
+      {{(form?.customValidateErrors | async).materials[i]?.count?.join(', ')}}
+    </span>
+    <br>
+  </div>
+  <button (click)="getMaterials().removeAt(i)">x</button>
+   <br><br>
+  </div>
+  <h3>operations</h3>
+  <button (click)="addOps()">add operations</button>
+  <br><br>
+  <!--array operations-->
   <div formArrayName="operations"
-      *ngFor="let operation of getOps().controls; let i=index">
+      *ngFor="let operation of getOps().controls.slice(0,5); let i=index">
       <div [formGroupName]="i">
+        <!--hour-->
         <label for="">hour</label>
         <input formControlName="hour" placeholder="hour" type="number">
          <span *ngIf="(form?.customValidateErrors | async)?.operations">
           {{(form?.customValidateErrors | async).operations[i]?.hour?.join(', ')}}
         </span>
         <br>
+        <!--reference-->
+        <label for="">reference</label>
+        <input formControlName="reference" placeholder="reference" >
+         <span *ngIf="(form?.customValidateErrors | async)?.operations">
+          {{(form?.customValidateErrors | async).operations[i]?.reference?.join(', ')}}
+        </span>
+        <br>
+
+         <!--materialCount-->
+         <label for="">materialCount</label>
+         <input formControlName="materialCount" placeholder="materialCount" type="number">
+          <span *ngIf="(form?.customValidateErrors | async)?.operations">
+           {{(form?.customValidateErrors | async).operations[i]?.materialCount?.join(', ')}}
+         </span>
+         <br>
+
+        <!--description-->
         <label for="">description</label>
         <input formControlName="description" placeholder="description">
-
         <span *ngIf="(form?.customValidateErrors | async)?.operations">
           {{(form?.customValidateErrors | async).operations[i]?.description?.join(', ')}}
         </span>
@@ -31,4 +88,6 @@
 </div>
 
 <br>
+<button (click)="onLoadClick()">Load</button>
+<button (click)="onClearClick()">Clear</button>
 <button (click)="onSaveClick()" [disabled]="!form.valid">Save</button>
