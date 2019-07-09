@@ -46,10 +46,16 @@ export class ObjectMustBeNotEmpty implements ValidatorConstraintInterface {
 export class PropertySum implements ValidatorConstraintInterface {
   validate(data: Object | ArrayLike<Object>, valArgs: ValidationArguments) {
     if (valArgs.constraints.length !== 2) {
-      throw new Error('Should be 2 property in PropertySum');
+      throw new Error('Should be 2 arguments in PropertySum');
     }
+
+    const [prop, func] = valArgs.constraints;
+
+    if (typeof func !== 'function') {
+      throw new Error('Second argument should be function');
+    }
+
     if (Array.isArray(data)) {
-      const [prop, func] = valArgs.constraints;
       if (data.length === 1) {
         return func(data[0][prop]);
       } else {
