@@ -83,11 +83,13 @@
 
 <div>
 		<p>Form status: {{ form.status | json }}</p>
-    <p>Custom validation errors: {{form.customValidateErrors|async|json}}</p>
-    <p>Native errors: {{form?.nativeValidateErrors| async | json}}</p>
+    <!-- <p>Custom validation errors: {{form.customValidateErrors|async|json}}</p>
+    <p>Native errors: {{form?.nativeValidateErrors| async | json}}</p> -->
 </div>
 
 <br>
 <button (click)="onLoadClick()">Load</button>
 <button (click)="onClearClick()">Clear</button>
 <button (click)="onSaveClick()" [disabled]="!form.valid">Save</button>
+
+<!-- {{saved | json}} -->

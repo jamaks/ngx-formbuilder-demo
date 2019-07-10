@@ -1,6 +1,26 @@
 import { Injectable } from '@angular/core';
 import { plainToClass } from 'class-transformer';
 import { Sections } from './model';
+
+const getOperations = () => {
+  const arr = [];
+  for (let i = 0; i < 10; i++) {
+    arr.push(
+      {
+        id: i,
+        hour: 20,
+        reference: 'hey',
+        materialCount: 1,
+        description: 'Hey! Its first operation'
+      }
+    )
+  }
+  return arr;
+}
+
+const ops = getOperations();
+console.log(ops);
+
 @Injectable()
 export class OperationService {
 
@@ -16,20 +36,23 @@ export class OperationService {
           count: 3
         }
       ],
-      operations: [
-        {
-          id: 1,
-          hour: 20,
-          reference: 'hey',
-          description: 'Hey! Its first operation'
-        },
-        {
-          id: 1,
-          hour: 4,
-          reference: 'heyy',
-          description: 'Hey! Its second operation'
-        }
-      ]
+      operations: ops
+      // operations: [
+      //   {
+      //     id: 1,
+      //     hour: 20,
+      //     reference: 'hey',
+      //     materialCount: 1,
+      //     description: 'Hey! Its first operation'
+      //   },
+      //   {
+      //     id: 1,
+      //     hour: 4,
+      //     reference: 'heyy',
+      //     materialCount: 1,
+      //     description: 'Hey! Its second operation'
+      //   }
+      // ]
     });
   }
 

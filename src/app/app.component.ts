@@ -24,7 +24,6 @@ export class AppComponent {
     @Inject(OperationService) private operationService: OperationService) {
     this.form = this.fb.group(Sections, { customValidatorOptions: {} });
     this.form.valueChanges.subscribe(r => {
-      console.log(this.getMaterials().value);
       this.formStore.form = this.form.object;
     });
     this.form.object = plainToClass(Sections, {name: 'Section form'});
